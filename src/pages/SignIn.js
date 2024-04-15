@@ -12,7 +12,18 @@ const SignIn = () => {
 const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!isValidEmail(formData.email)) {
+      setErrors({ email: 'Invalid email format' });
+      alert("Invalid email format")
+      return;
+    }
 
+    
+    if (formData.password.length < 6) {
+      setErrors({ password: 'Password must be at least 6 characters long' });
+      alert("Password must be at least 6 characters long")
+      return;
+    }
     try {
       const response = await axios.post(
         'https://api-dev.quicklyinc.com/auth/login',
@@ -36,7 +47,11 @@ const navigate = useNavigate();
       // Handle signin error, e.g., display error message
     }
   };
-
+  const isValidEmail = (email) => {
+    // Regular expression to validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     setErrors({});
